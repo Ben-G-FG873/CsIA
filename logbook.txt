@@ -1,0 +1,5 @@
+2021.7.5：
+register.js已经可以实现注册功能
+register.ejs使用相同代码时无法运行，mysql函数，require函数无法同时运行
+浏览器无法引用本地js文件，需要上传
+可能需要php访问数据库

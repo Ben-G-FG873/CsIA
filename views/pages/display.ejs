@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>
+    <%= title %>
+  </title>
+  <link rel='stylesheet' href='/stylesheets/style.css' />
+  <script src='javascripts/echarts.min.js'></script>
+</head>
+
+<body>
+  <h1>
+    <%= title %>
+  </h1>
+  <p>Welcome to <%= title %>, see your performance now!</p>
+
+  <form action="form_action.asp" method="get">
+    What graph and/or figures would you like to view：
+    <select id='type'>
+        <option value='bar'>Bar</option>
+        <option value='pie'>Pie</option>
+        <option value='line'>Line</option>
+        <option value='figures'>Figures</option>
+     </select>
+  </form>
+
+  <input type="button" value=""
+  onclick="javacript:show()"/>
+  </div>
+
+  <form action="form_action.asp" method="get">
+    Test ID:<input type='text' id="test" name="test" placeholder="Please enter test"/>
+    <div>
+    Name:<input type="text" id="name" name="name" placeholder="Please enter name"/>
+    <div>
+      <input type="button" value="" 
+      onclick="javascript:select()">
+    </from>
+  
+  <!-- prepare a DOM container with width and height -->
+  <div id="main" style="width: 800px;height:400px;"></div>
+
+  If you want to upload another test, press here:
+  <form>
+    <input type="button" value="Go back" onclick="history.back()">
+  </form>
+  
+  <script type="text/javascript">
+    function show(){   
+      var myselect = document.getElementById("type");   
+      if(myselect.value == 'bar'){   
+        alert('bar chart');
+      };
+      if(myselect.value == 'pie'){
+        alert('pie chart');
+      };
+      if(myselect.value == 'line'){
+        alert('line chart');
+      };
+      if(myselect.value == 'figures'){
+        alert('display figures');
+      };
+    } 
+
+    function select(form){
+      var testid = document.getElementById("test");
+      var parname = document.getElementById("name");
+      alert('205')
+    }
+    
+    console.log(<%- JSON.stringify(stat) %>)
+    // based on prepared DOM, initialize echarts instance
+    var myChart = echarts.init(document.getElementById('main'));
+
+    // specify chart configuration item and data
+    var option = {
+      //backgroundColor: '#2c343c',
+      //textStyle: {
+        //color: 'rgba(255, 255, 255, 0.3)'
+      //},
+      
+      title: {
+        text: 'Wrong Questions',
+        left: 'center',
+        top: 20,
+        textStyle: {
+          color: 'rgba(180,180,180,0.9)'
+        }
+      },
+      tooltip: {},
+      legend: {
+        data: ['Number of Questions'],
+        textStyle: {
+          color: '#ccc'
+        }
+      },
+      toolbox: {//添加一个toolbox配置
+        show: true,
+        feature: {
+          dataZoom: {
+            yAxisIndex: "none"
+          },
+          dataView: {
+            readOnly: false
+          },
+          magicType: {//配置可以动态切换的类型：
+            type: ["bar", "pie","line"]
+          },
+          restore: {},
+          saveAsImage: {}
+        }
+      },
+      xAxis: {
+        name: 'kind of question',
+        data: <%- JSON.stringify(Object.keys(stat['205']['张三'])) %>
+      },
+      yAxis: {
+        name:'number of questions',
+      },
+      series: [
+        {
+        name: '张三',
+        type: 'bar',
+        data: <%= JSON.stringify(Object.values(stat['205']['张三'])) %>,
+        showBackground: true,
+        backgroundStyle: {
+          color: 'rgba(180,180,180,0.2)'
+        }
+        },
+        {
+        name: '李四',
+        type: 'bar',
+        data: <%= JSON.stringify(Object.values(stat['205']['李四'])) %>,
+        showBackground: true,
+        backgroundStyle: {
+          color: 'rgba(180,180,180,0.2)'
+        }
+      }]
+    };
+
+    // use configuration item and data specified to show chart
+    myChart.setOption(option);
+  </script>
+</body>
+
+</html>

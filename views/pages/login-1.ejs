@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>
+    <%= title %>
+  </title>
+  <link rel='stylesheet' href='/stylesheets/style.css' />
+  <link rel="shortcut icon" href="#">
+  </head>
+</head>
+
+<body>
+  <h1>
+    <%= title %>
+  </h1>
+  <p>Welcome to <%= title %>, please login:</p>
+  <form action="form_action.asp" method="get">
+    Username:<input type='text' id="username" name="username" placeholder="Please enter username"/>
+    <div>
+    Password<input type="password" id="password" name="password" placeholder="Please enter password"/>
+    <div class="btn">
+      <input type="button" id="submit" class="submit" value="Login" onclick="return check(this.form);">
+      <input type="reset" id="reset" class="reset" value="Reset" >
+    </div>
+      <div id="CheckMsg" class="msg"></div>
+  </form>
+
+    <script type="text/javascript">
+
+      //验证表单是否为空，若为空则将焦点聚焦在input表单上，否则表单通过，登录成功
+      function check(form){
+        var username = $("#username"),$password = $("#password");
+        var username = username.val(),password = $password.val();
+        if(!username || username == ""){
+          showMsg("Please enter uername");
+          form.username.focus ();
+          return false;
+        }
+        if(!password || password == ""){
+          showMsg("Please enter password");
+          form.password.focus ();
+          return false;
+        }
+
+      //这里为用ajax获取用户信息并进行验证，如果账户密码不匹配则登录失败，如不需要验证用户信息，这段可不写
+      $.ajax({
+        url : systemURL,// 获取自己系统后台用户信息接口
+        data :{"password":password,"username":username},
+        type : "GET",
+        dataType: "json",
+        success : function(data) {
+          if (data){
+            if (data.code == "1111") { //判断返回值
+              setTimeout(function () {//做延时以便显示登录状态值
+                showMsg("Login successful");
+                console.log(data);
+                window.location.href='http://localhost:3000/upload';//指向登录的页面地址
+              },100)
+            } else {
+              showMsg(data.message);//登录失败
+              return false;
+            }
+          }
+        },
+        error : function(data){
+          showMsg(data.message);
+        }
+      });
+ 
+    //错误信息提醒
+    function showMsg(msg){
+      $("#CheckMsg").text(msg);
+    }
+ 
+    //监听回车键提交
+    $(function(){
+      document.onkeydown=keyDownSearch;
+      function keyDownSearch(e) {
+      // 兼容FF和IE和Opera
+        var theEvent = e || window.event;
+        var code = theEvent.keyCode || theEvent.which || theEvent.charCode;
+        if (code == 13) {
+          $('#submit').click();//具体处理函数
+          return false;
+        }
+        return true;
+      }
+    });
+      </script>
+      
+  </form>
+</body>
+
+</html>

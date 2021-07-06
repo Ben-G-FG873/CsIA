@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>
+    <%= title %>
+  </title>
+  <link rel='stylesheet' href='/stylesheets/style.css' />
+  <link rel="shortcut icon" href="#">
+  </head>
+</head>
+
+<body>
+  <h1>
+    <%= title %>
+  </h1>
+  <p>Welcome to <%= title %>, please login:</p>
+  <form action="form_action.asp" method="get">
+    Username:<input type='text' id="username" name="username" placeholder="Please enter username"/>
+    <div>
+    Password<input type="password" id="password" name="password" placeholder="Please enter password"/>
+    <div class="form-actions">
+      <input type="button" value="submit"
+        onclick="javascript: display_alert()"/>
+      </div>
+  </form>
+
+    <script type="text/javascript">
+    function display_alert(){
+      var username = document.getElementById("username");
+      var password = document.getElementById("password");
+
+      var mysql  = require('mysql');  
+ 
+      var connection = mysql.createConnection({     
+        host     : 'localhost',       
+        user     : 'root',              
+        password : '123456',       
+        port     : '3306',                   
+        database : 'user' 
+      }); 
+ 
+      connection.connect();
+
+      if(username.value == 'FragrantVeil873'){
+        if(password.value == '20040405'){   
+          alert("Login successful");
+          window.location.href='http://localhost:3000/upload'
+        } else if (password.value != '20040405'){
+          alert("Invalid password");
+        };
+      } else if (username.value != "FragrantrVeil873")
+        alert("Invalid username")
+      }
+      </script>
+      
+  </form>
+</body>
+
+</html>
